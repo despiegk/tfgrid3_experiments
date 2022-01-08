@@ -37,7 +37,7 @@ resource "grid_deployment" "d1" {
   ip_range = lookup(grid_network.net1.nodes_ip_range, 1, "")
   disks {
     name = "root"
-    size = 1
+    size = 10
     description = "root vol"
   }
   # disks {
@@ -47,8 +47,8 @@ resource "grid_deployment" "d1" {
   # }
   vms {
     name = "vm1"
-    flist = "https://hub.grid.tf/samehabouelsaad.3bot/abouelsaad-grid3_ubuntu1.04-latest.flist"
-    # flist = "https://hub.grid.tf/omarabdul3ziz.3bot/omarabdul3ziz-ubuntu-1.04-devenv.flist"
+    flist = "https://hub.grid.tf/samehabouelsaad.3bot/abouelsaad-grid3_ubuntu20.04-latest.flist"
+    # flist = "https://hub.grid.tf/omarabdul3ziz.3bot/omarabdul3ziz-ubuntu-20.04-devenv.flist"
     entrypoint = "/init.sh"
     # entrypoint = "/start.sh"
     mounts {

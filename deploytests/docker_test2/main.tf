@@ -24,20 +24,20 @@ provider "grid" {
 }
 
 resource "grid_network" "net1" {
-    nodes = [20]
+    nodes = [1]
     ip_range = "10.1.0.0/16"
-    name = "kds_network"
+    name = "test2_network"
     description = "newer network"
     add_wg_access = true
 }
 
 resource "grid_deployment" "d1" {
-  node = 20
+  node = 1
   network_name = grid_network.net1.name
-  ip_range = lookup(grid_network.net1.nodes_ip_range, 20, "")
+  ip_range = lookup(grid_network.net1.nodes_ip_range, 1, "")
   disks {
     name = "root"
-    size = 20
+    size = 10
     description = "root vol"
   }
   disks {
@@ -75,11 +75,11 @@ resource "grid_deployment" "d1" {
     host     = grid_deployment.d1.vms[0].ygg_ip
   }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "mkdir -p /tmp/${var.emailaddr}"
-  #   ]
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p /tmp/${var.emailaddr}"
+    ]
+  }
 
   provisioner "file" {
     source      = "scripts"
