@@ -18,6 +18,21 @@ export TF_VAR_emailaddr=???@incubaid.com
 export TF_VAR_mnemonics="todo"
 ```
 
+to now deploy go to the directory: https://github.com/despiegk/tfgrid3_experiments/tree/main/deploytests as is checked out on your HD.
+
+and do
+
+```bash
+cd ~/code/...
+#to install terraform
+bash terraform_install
+#make sure the env's are set of above
+#next will deploy the chosen name $TF_VAR_name set it for the dir you want
+bash reinstall.sh
+#destroy removes all
+bash destroy.sh
+```
+
 ### login over ssh
 
 ```
@@ -55,3 +70,19 @@ umount $name/proc
 umount $name/sys
 umount $name/dev
 ```
+
+### use screen
+
+we use screen to start commands in background
+
+```bash
+#list the sessions
+screen -ls
+#attach to a session
+screen -r $nameofsession_partial_ok
+#kill session
+screen -S $nameofsession_partial_ok -X quit
+
+```
+
+once attached, to go out do ```ctrl a d```

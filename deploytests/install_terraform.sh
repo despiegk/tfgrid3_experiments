@@ -9,6 +9,12 @@ pushd docker_test
 terraform init
 popd
 
+popd
+
+pushd docker_test2
+terraform init
+popd
+
 
 
 

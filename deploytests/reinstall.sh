@@ -1,6 +1,7 @@
 #!/bin/bash
-pushd $TF_VAR_name
+set -ex
 clear
+pushd $TF_VAR_name
 echo
 echo "THIS WILL TAKE 10-15 MINUTES !!!"
 echo

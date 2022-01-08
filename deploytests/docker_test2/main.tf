@@ -24,29 +24,24 @@ provider "grid" {
 }
 
 resource "grid_network" "net1" {
-    nodes = [1]
-    ip_range = "10.1.0.0/16"
+    nodes = [22]
+    ip_range = "10.2.0.0/16"
     name = "test2_network"
     description = "newer network"
     add_wg_access = true
 }
 
 resource "grid_deployment" "d1" {
-  node = 1
+  node = 22
   network_name = grid_network.net1.name
-  ip_range = lookup(grid_network.net1.nodes_ip_range, 1, "")
+  ip_range = lookup(grid_network.net1.nodes_ip_range, 22, "")
   disks {
     name = "root"
-    size = 10
+    size = 50
     description = "root vol"
   }
-  disks {
-    name = "var"
-    size = 100
-    description = "var"
-  }
   vms {
-    name = "vm1"
+    name = "docker2"
     flist = "https://hub.grid.tf/samehabouelsaad.3bot/abouelsaad-grid3_ubuntu20.04-latest.flist"
     # flist = "https://hub.grid.tf/omarabdul3ziz.3bot/omarabdul3ziz-ubuntu-20.04-devenv.flist"
     entrypoint = "/init.sh"
@@ -54,14 +49,10 @@ resource "grid_deployment" "d1" {
     mounts {
         disk_name = "root"
         mount_point = "/root"
-    }  
-    mounts {
-        disk_name = "var"
-        mount_point = "/var"
-    }        
+    }       
     cpu = 8
     memory = 8000
-    rootfs_size = 10000
+    # rootfs_size = 10000
     env_vars = {
       SSH_KEY ="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/9RNGKRjHvViunSOXhBF7EumrWvmqAAVJSrfGdLaVasgaYK6tkTRDzpZNplh3Tk1aowneXnZffygzIIZ82FWQYBo04IBWwFDOsCawjVbuAfcd9ZslYEYB3QnxV6ogQ4rvXnJ7IHgm3E3SZvt2l45WIyFn6ZKuFifK1aXhZkxHIPf31q68R2idJ764EsfqXfaf3q8H3u4G0NjfWmdPm9nwf/RJDZO+KYFLQ9wXeqRn6u/mRx+u7UD+Uo0xgjRQk1m8V+KuLAmqAosFdlAq0pBO8lEBpSebYdvRWxpM0QSdNrYQcMLVRX7IehizyTt+5sYYbp6f11WWcxLx0QDsUZ/J"
     }
@@ -75,14 +66,8 @@ resource "grid_deployment" "d1" {
     host     = grid_deployment.d1.vms[0].ygg_ip
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "mkdir -p /tmp/${var.emailaddr}"
-    ]
-  }
-
   provisioner "file" {
-    source      = "scripts"
+    source      = "../scripts"
     destination = "/tmp"
   }
 
@@ -101,8 +86,8 @@ resource "grid_deployment" "d1" {
       "echo ${var.emailaddr} > /tmp/emailaddr",
       # "apt-get autoremove && apt-get clean"
       # "bash /tmp/install.sh",
-      # "bash /tmp/scripts/install_docker.sh"
-      # "bash /tmp/scripts/install_codeserver.sh"
+      "bash /tmp/scripts/install_docker.sh",
+      "bash /tmp/scripts/install_codeserver.sh"
       # "bash /tmp/scripts/install_chroot.sh"
     ]
   }
