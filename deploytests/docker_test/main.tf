@@ -18,30 +18,35 @@ variable "secret" {
   type = string
 }
 
+variable "name" {
+  type = string
+}
+
+
 provider "grid" {
     mnemonics = var.mnemonics
     network = "test" # or test to use testnet
 }
 
 resource "grid_network" "net1" {
-    nodes = [1]
-    ip_range = "10.1.0.0/16"
-    name = "kds_network"
-    description = "newer network"
+    nodes = [22]
+    ip_range = "10.2.0.0/16"
+    name = "${var.name}_network"
+    description = "newer network for ${var.name}"
     add_wg_access = true
 }
 
 resource "grid_deployment" "d1" {
-  node = 1
+  node = 22
   network_name = grid_network.net1.name
-  ip_range = lookup(grid_network.net1.nodes_ip_range, 1, "")
+  ip_range = lookup(grid_network.net1.nodes_ip_range, 22, "")
   disks {
     name = "root"
     size = 50
     description = "root vol"
   }
   vms {
-    name = "docker1"
+    name = "${var.name}"
     flist = "https://hub.grid.tf/samehabouelsaad.3bot/abouelsaad-grid3_ubuntu20.04-latest.flist"
     # flist = "https://hub.grid.tf/omarabdul3ziz.3bot/omarabdul3ziz-ubuntu-20.04-devenv.flist"
     entrypoint = "/init.sh"

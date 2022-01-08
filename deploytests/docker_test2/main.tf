@@ -18,6 +18,11 @@ variable "secret" {
   type = string
 }
 
+variable "name" {
+  type = string
+}
+
+
 provider "grid" {
     mnemonics = var.mnemonics
     network = "test" # or test to use testnet
@@ -26,8 +31,8 @@ provider "grid" {
 resource "grid_network" "net1" {
     nodes = [22]
     ip_range = "10.2.0.0/16"
-    name = "test2_network"
-    description = "newer network"
+    name = "${var.name}_network"
+    description = "newer network for ${var.name}"
     add_wg_access = true
 }
 
@@ -41,7 +46,7 @@ resource "grid_deployment" "d1" {
     description = "root vol"
   }
   vms {
-    name = "docker2"
+    name = "${var.name}"
     flist = "https://hub.grid.tf/samehabouelsaad.3bot/abouelsaad-grid3_ubuntu20.04-latest.flist"
     # flist = "https://hub.grid.tf/omarabdul3ziz.3bot/omarabdul3ziz-ubuntu-20.04-devenv.flist"
     entrypoint = "/init.sh"
@@ -86,7 +91,7 @@ resource "grid_deployment" "d1" {
       "echo ${var.emailaddr} > /tmp/emailaddr",
       # "apt-get autoremove && apt-get clean"
       # "bash /tmp/install.sh",
-      "bash /tmp/scripts/install_docker.sh",
+      # "bash /tmp/scripts/install_docker.sh",
       "bash /tmp/scripts/install_codeserver.sh"
       # "bash /tmp/scripts/install_chroot.sh"
     ]

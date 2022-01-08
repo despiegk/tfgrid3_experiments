@@ -11,6 +11,8 @@ screen -admL -S ssh2 ssh -L 9998:127.0.0.1:9998 root@$IPADDR
 
 # ssh -A root@$IPADDR screen -admL -S codeserver code-server
 
+popd
+
 sleep 3
 
 open 'https://localhost:8080/?folder=%2Froot%2F.vmodules%2Fdespiegk'
@@ -25,4 +27,4 @@ screen -ls
 
 
 
-popd
+
