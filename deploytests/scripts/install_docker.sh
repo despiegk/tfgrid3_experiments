@@ -33,6 +33,8 @@ rsync -aP /var/lib/docker/ /root/docker/
 
 rm -rf /var/lib/docker
 
+sleep 3
+
 #start the docker engine
 screen -admL -S docker dockerd
 
