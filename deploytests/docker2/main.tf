@@ -22,6 +22,16 @@ variable "name" {
   type = string
 }
 
+variable "nr" {
+  type = string
+}
+
+
+variable "node" {
+  type = string
+}
+
+
 
 provider "grid" {
     mnemonics = var.mnemonics
@@ -29,17 +39,17 @@ provider "grid" {
 }
 
 resource "grid_network" "net1" {
-    nodes = [22]
-    ip_range = "10.2.0.0/16"
-    name = "${var.name}_network"
-    description = "newer network for ${var.name}"
+    nodes = [var.node]
+    ip_range = "10.${var.nr}.0.0/16"
+    name = "network_${var.nr}"
+    description = "network for ${var.name}"
     add_wg_access = true
 }
 
 resource "grid_deployment" "d1" {
-  node = 22
+  node = var.node
   network_name = grid_network.net1.name
-  ip_range = lookup(grid_network.net1.nodes_ip_range, 22, "")
+  ip_range = lookup(grid_network.net1.nodes_ip_range, var.node, "")
   disks {
     name = "root"
     size = 50
@@ -81,7 +91,7 @@ resource "grid_deployment" "d1" {
     inline = [
       "apt update && apt upgrade -y && apt install mc curl git tmux pen htop sudo net-tools screen -y",
       # "yes | unminimize",
-      "curl https://raw.githubusercontent.com/freeflowuniverse/crystaltools/development/install.sh > /tmp/install.sh", 
+      "curl https://raw.githubusercontent.com/freeflowuniverse/crystaltools/development/install.sh > /tmp/scripts/install_publishtools.sh", 
       #make sure to add your own email
       "git config --global user.email '${var.emailaddr}'",
       #do ipv6 from 8000 to 8080 and 8001 to 9998, the local ones are ipv4
@@ -90,7 +100,7 @@ resource "grid_deployment" "d1" {
       "echo ${var.secret} > /tmp/secret",
       "echo ${var.emailaddr} > /tmp/emailaddr",
       # "apt-get autoremove && apt-get clean"
-      # "bash /tmp/install.sh",
+      # "bash /tmp/scripts/install_publishtools.sh",
       # "bash /tmp/scripts/install_docker.sh",
       "bash /tmp/scripts/install_codeserver.sh"
       # "bash /tmp/scripts/install_chroot.sh"
@@ -106,4 +116,5 @@ output "node1_zmachine1_ip" {
 output "ygg_ip" {
     value = grid_deployment.d1.vms[0].ygg_ip
 }
+
 

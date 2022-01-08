@@ -1,0 +1,8 @@
+pushd $TF_VAR_name
+export IPADDR=`terraform output -raw ygg_ip`
+# rm ~/.ssh/known_hosts
+ssh -oStrictHostKeyChecking=no -A root@$IPADDR 
+popd 2>&1 > /dev/null
+
+source scripts/ready.sh
+

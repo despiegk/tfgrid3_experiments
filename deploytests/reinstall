@@ -1,10 +1,13 @@
 #!/bin/bash
-set -ex
+# set -e
 clear
 pushd $TF_VAR_name
 echo
 echo "THIS WILL TAKE 10-15 MINUTES !!!"
 echo
+export TF_VAR_name="M${TF_VAR_nr}"
 terraform destroy  -auto-approve
 terraform apply -parallelism=1  -auto-approve
-popd
+popd 2>&1 > /dev/null
+
+source scripts/ready.sh

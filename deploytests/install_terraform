@@ -1,21 +1,21 @@
+#!/bin/bash
 pushd /tmp
 rm -f terraform-install.sh
 curl -LO https://raw.github.com/robertpeteuil/terraform-installer/master/terraform-install.sh
 chmod +x terraform-install.sh
 bash terraform-install.sh
-popd
+popd 2>&1 > /dev/null
 
 pushd docker_test
 terraform init
-popd
-
-popd
+popd 2>&1 > /dev/null
 
 pushd docker_test2
 terraform init
-popd
+popd 2>&1 > /dev/null
 
 
+source scripts/ready.sh
 
 
 

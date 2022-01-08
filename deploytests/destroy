@@ -1,0 +1,12 @@
+#!/bin/bash
+set +e
+for scr in $(screen -ls | awk '{print $1}'); do screen -S $scr -X quit; done
+pushd $TF_VAR_name
+clear
+echo
+echo "THIS DESTROYS ALL ACTIVE MACHINES !!!"
+echo
+terraform destroy  -auto-approve
+popd 2>&1 > /dev/null
+clear
+source scripts/ready.sh
