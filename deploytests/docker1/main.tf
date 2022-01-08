@@ -57,10 +57,8 @@ resource "grid_deployment" "d1" {
   }
   vms {
     name = "${var.name}"
-    flist = "https://hub.grid.tf/samehabouelsaad.3bot/abouelsaad-grid3_ubuntu20.04-latest.flist"
-    # flist = "https://hub.grid.tf/omarabdul3ziz.3bot/omarabdul3ziz-ubuntu-20.04-devenv.flist"
+    flist = "https://hub.grid.tf/kristof.3bot/threefoldtech-grid3_docker_host-3.0.flist"
     entrypoint = "/init.sh"
-    # entrypoint = "/start.sh"
     mounts {
         disk_name = "root"
         mount_point = "/root"
@@ -89,21 +87,10 @@ resource "grid_deployment" "d1" {
 
   provisioner "remote-exec" {
     inline = [
-      "apt update && apt upgrade -y && apt install mc curl git tmux pen htop sudo net-tools screen rsync -y",
-      # "yes | unminimize",
-      "curl https://raw.githubusercontent.com/freeflowuniverse/crystaltools/development/install.sh > /tmp/scripts/install_publishtools.sh", 
-      #make sure to add your own email
       "git config --global user.email '${var.emailaddr}'",
-      #do ipv6 from 8000 to 8080 and 8001 to 9998, the local ones are ipv4
-      "pen -d :::8000 127.0.0.1:8080",
-      "pen -d :::8001 127.0.0.1:9998",
-      "echo ${var.secret} > /tmp/secret",
-      "echo ${var.emailaddr} > /tmp/emailaddr",
-      # "apt-get autoremove && apt-get clean"
-      # "bash /tmp/scripts/install_publishtools.sh",
-      "bash /tmp/scripts/install_docker.sh",
-      "bash /tmp/scripts/install_codeserver.sh"
-      # "bash /tmp/scripts/install_chroot.sh"
+      "bash /tmp/scripts/start_docker.sh",
+      
+
     ]
   }
 }
