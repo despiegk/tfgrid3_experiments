@@ -89,7 +89,7 @@ resource "grid_deployment" "d1" {
 
   provisioner "remote-exec" {
     inline = [
-      "apt update && apt upgrade -y && apt install mc curl git tmux pen htop sudo net-tools screen -y",
+      "apt update && apt upgrade -y && apt install mc curl git tmux pen htop sudo net-tools screen rsync -y",
       # "yes | unminimize",
       "curl https://raw.githubusercontent.com/freeflowuniverse/crystaltools/development/install.sh > /tmp/scripts/install_publishtools.sh", 
       #make sure to add your own email
@@ -101,7 +101,7 @@ resource "grid_deployment" "d1" {
       "echo ${var.emailaddr} > /tmp/emailaddr",
       # "apt-get autoremove && apt-get clean"
       # "bash /tmp/scripts/install_publishtools.sh",
-      # "bash /tmp/scripts/install_docker.sh",
+      "bash /tmp/scripts/install_docker.sh",
       "bash /tmp/scripts/install_codeserver.sh"
       # "bash /tmp/scripts/install_chroot.sh"
     ]
