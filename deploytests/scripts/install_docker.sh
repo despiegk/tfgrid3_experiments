@@ -11,11 +11,27 @@ $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev
 apt-get update
 apt-get install docker-ce docker-ce-cli containerd.io -y
 
-cp /tmp/scripts/docker_daemon.json /etc/docker/
+mkdir -p /etc/docker/
+cp /tmp/scripts/docker_daemon.json /etc/docker/daemon.json
 
-rsync -aP /var/lib/docker/ /root/docker
+#start the docker engine
+screen -admL -S docker dockerd
+sleep 2
 
-mv /var/lib/docker /var/lib/docker.bkp
+set -e
+
+docker run hello-world
+
+pkill dockerd
+
+screen -S docker -X quit
+
+sleep 2
+
+mkdir -p /root/docker/
+rsync -aP /var/lib/docker/ /root/docker/
+
+rm -rf /var/lib/docker
 
 #start the docker engine
 screen -admL -S docker dockerd
