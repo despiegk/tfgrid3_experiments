@@ -52,17 +52,27 @@ resource "grid_deployment" "d1" {
   ip_range = lookup(grid_network.net1.nodes_ip_range, var.node, "")
   disks {
     name = "root"
-    size = 50
+    size = 1
     description = "root vol"
   }
+  disks {
+    name = "docker"
+    size = 50
+    description = "space for docker"
+  }  
   vms {
     name = "${var.name}"
-    flist = "https://hub.grid.tf/kristof.3bot/threefoldtech-grid3_docker_host-3.0.flist"
+    # flist = "https://hub.grid.tf/kristof.3bot/threefoldtech-grid3_docker_host-3.0.flist"
+    flist = "https://hub.grid.tf/kristof.3bot/threefoldtech-grid3_ubuntu_dev-20.04.flist"
     entrypoint = "/init.sh"
     mounts {
         disk_name = "root"
         mount_point = "/root"
     }       
+    mounts {
+        disk_name = "docker"
+        mount_point = "/var/lib/docker"
+    }           
     cpu = 8
     memory = 8000
     # rootfs_size = 10000
@@ -88,9 +98,7 @@ resource "grid_deployment" "d1" {
   provisioner "remote-exec" {
     inline = [
       "git config --global user.email '${var.emailaddr}'",
-      "bash /tmp/scripts/start_docker.sh",
-      
-
+      # "bash /tmp/scripts/start_docker.sh",
     ]
   }
 }
